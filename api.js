@@ -4,7 +4,7 @@ const axios = require('axios');
 const mqtt = require('mqtt');
 
 const app = express();
-const PORT = process.env.PORT | 3001;
+const PORT = process.env.PORT || 3001;
 
 // Connection URI
 const DB = process.env.DB;
