@@ -53,7 +53,7 @@ app.get('/getLastData', async (req, res) => {
 
     return res.send({ result: true, data: result[result.length - 1] });
   } catch (error) {
-    console.log(error);
+    console.log(error.message);
 
     return res.send({ result: false, msg: error });
   }
