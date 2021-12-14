@@ -42,7 +42,7 @@ app.get('/getLastData/:bid', async (req, res) => {
     const collection = db.collection(COLLECTION);
 
     console.log(req.params);
-    const query = collection.find({ BID: req.params.bid });
+    const query = collection.find({ BID: parseInt(req.params.bid) });
 
     if ((await query.count()) === 0) {
       console.log('No documents found!');
