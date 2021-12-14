@@ -34,19 +34,19 @@ app.get('/', (req, res) => {
 });
 
 // get last data
-app.get('/getLastData', async (req, res) => {
+app.get('/getLastData/:bid', async (req, res) => {
   try {
     await client.connect();
 
     const db = client.db(DB);
     const collection = db.collection(COLLECTION);
 
-    const query = collection.find({});
+    const query = collection.find({ BID: req.params.bid });
 
     if ((await query.count()) === 0) {
       console.log('No documents found!');
 
-      return res.send({ result: false, msg: 'No documents found.' });
+      return res.send({ result: false, msg: 'No documents found' });
     }
 
     const result = await query.toArray();
