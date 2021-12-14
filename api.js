@@ -41,6 +41,7 @@ app.get('/getLastData/:bid', async (req, res) => {
     const db = client.db(DB);
     const collection = db.collection(COLLECTION);
 
+    console.log(req.params);
     const query = collection.find({ BID: req.params.bid });
 
     if ((await query.count()) === 0) {
