@@ -136,6 +136,12 @@ app.post('/schedule', (req, res) => {
     Object.keys(req.body).length === 1 &&
     req.body.hasOwnProperty('schedule')
   ) {
+    if (cron.validate(req.body.schedule)) {
+      let id = scheduleWatering(req.body.schedule);
+      return res.send({ result: true, task_id: id, msg: 'Schedule made' });
+    } else {
+      return res.status(401).send({ result: false, msg: 'Fail to schedule' });
+    }
   } else {
     return res.status(400).send({ result: false, msg: 'Invalid body' });
   }
@@ -148,12 +154,16 @@ function should_water() {
 }
 
 function scheduleWatering(schedule) {
-  task[ID] = cron.schedule(schedule, watering, {
-    scheduled: true,
-    timezone: 'Asia/Bangkok',
-  });
-
-  return ID++;
+  try {
+    task[ID] = cron.schedule(schedule, watering, {
+      scheduled: true,
+      timezone: 'Asia/Bangkok',
+    });
+    return ID++;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
 }
 
 function watering() {
