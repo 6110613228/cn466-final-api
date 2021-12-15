@@ -108,7 +108,7 @@ app.post('/getWeatherByLatLong', (req, res) => {
 });
 
 // Forecast by city
-app.post('/forcastByCity', (req, res) => {
+app.post('/forecastByCity', (req, res) => {
   if (Object.keys(req.body).length === 1 && req.body.hasOwnProperty('city')) {
     axios
       .get(
