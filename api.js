@@ -112,7 +112,7 @@ app.post('/forecastByCity', (req, res) => {
   if (Object.keys(req.body).length === 1 && req.body.hasOwnProperty('city')) {
     axios
       .get(
-        `${WEATHER_URI}/forcast.json?key=${WEATHER_API_KEY}&q=${req.body.city}&aqi=no`
+        `${WEATHER_URI}/forecast.json?key=${WEATHER_API_KEY}&q=${req.body.city}&aqi=no`
       )
       .then((response) => {
         return res.send(response.data);
@@ -149,7 +149,7 @@ function watering() {
 
 // 404
 app.all('*', (req, res) => {
-  res.status(404).send({ message: "Can't find ypur requested URL." });
+  res.status(404).send({ message: "Can't find your requested URL." });
 });
 
 app.listen(PORT, () => {
