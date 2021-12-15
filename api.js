@@ -2,7 +2,7 @@ const { MongoClient } = require('mongodb');
 const express = require('express');
 const axios = require('axios');
 const mqtt = require('mqtt');
-const  cron = require('node-cron');
+const cron = require('node-cron');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -27,6 +27,7 @@ const mqttClient = mqtt.connect('mqtt://broker.hivemq.com');
 const LED_TOPIC = process.env.LED_TOPIC;
 
 // schedule
+var ID = 0;
 var task = {};
 
 // Json body parser
@@ -131,7 +132,10 @@ app.post('/forecastByCity', (req, res) => {
 });
 
 app.post('/schedule', (req, res) => {
-  if (Object.keys(req.body).length === 1 && req.body.hasOwnProperty('schedule')) {
+  if (
+    Object.keys(req.body).length === 1 &&
+    req.body.hasOwnProperty('schedule')
+  ) {
   } else {
     return res.status(400).send({ result: false, msg: 'Invalid body' });
   }
@@ -143,7 +147,14 @@ function should_water() {
   // might classified image
 }
 
-function scheduleWatering(schedule) {}
+function scheduleWatering(schedule) {
+  task[ID] = cron.schedule(schedule, watering, {
+    scheduled: true,
+    timezone: 'Asia/Bangkok',
+  });
+
+  return ID++;
+}
 
 function watering() {
   let count = 0;
