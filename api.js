@@ -25,6 +25,9 @@ const mqttClient = mqtt.connect('mqtt://broker.hivemq.com');
 // TOPIC
 const LED_TOPIC = process.env.LED_TOPIC;
 
+// schedule
+var task = {};
+
 // Json body parser
 app.use(express.json());
 
@@ -126,11 +129,20 @@ app.post('/forecastByCity', (req, res) => {
   }
 });
 
+app.post('/schedule', (req, res) => {
+  if (Object.keys(req.body).length === 1 && req.body.hasOwnProperty('schedule')) {
+  } else {
+    return res.status(400).send({ result: false, msg: 'Invalid body' });
+  }
+});
+
 function should_water() {
   // get weather
   // get last data
   // might classified image
 }
+
+function scheduleWatering(schedule) {}
 
 function watering() {
   let count = 0;
