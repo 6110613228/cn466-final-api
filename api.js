@@ -107,6 +107,25 @@ app.post('/getWeatherByLatLong', (req, res) => {
   }
 });
 
+// Forecast by city
+app.post('/forcastByCity', (req, res) => {
+  if (Object.keys(req.body).length === 1 && req.body.hasOwnProperty('city')) {
+    axios
+      .get(
+        `${WEATHER_URI}/forcast.json?key=${WEATHER_API_KEY}&q=${req.body.city}&aqi=no`
+      )
+      .then((response) => {
+        return res.send(response.data);
+      })
+      .catch((error) => {
+        console.log(error.message);
+        return res.status(400).send({ result: false, msg: error.message });
+      });
+  } else {
+    return res.status(400).send({ result: false, msg: 'Invalid body' });
+  }
+});
+
 function should_water() {
   // get weather
   // get last data
