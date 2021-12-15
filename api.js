@@ -138,9 +138,45 @@ app.post('/schedule', (req, res) => {
   ) {
     if (cron.validate(req.body.schedule)) {
       let id = scheduleWatering(req.body.schedule);
-      return res.send({ result: true, task_id: id, msg: 'Schedule made' });
+      return res.send({ result: true, task_id: id, msg: 'Schedule is made' });
     } else {
       return res.status(401).send({ result: false, msg: 'Fail to schedule' });
+    }
+  } else {
+    return res.status(400).send({ result: false, msg: 'Invalid body' });
+  }
+});
+
+app.post('/startSchedule', (req, res) => {
+  if (
+    Object.keys(req.body).length === 1 &&
+    req.body.hasOwnProperty('schedule_id')
+  ) {
+    try {
+      startSchedule(req.body.schedule_id);
+      return res.send({ result: true, msg: 'Schedule start' });
+    } catch (error) {
+      return res
+        .status(401)
+        .send({ result: false, msg: 'Fail to start schedule' });
+    }
+  } else {
+    return res.status(400).send({ result: false, msg: 'Invalid body' });
+  }
+});
+
+app.post('/stopSchedule', (req, res) => {
+  if (
+    Object.keys(req.body).length === 1 &&
+    req.body.hasOwnProperty('schedule_id')
+  ) {
+    try {
+      stopSchedule(req.body.schedule_id);
+      return res.send({ result: true, msg: 'Schedule stop' });
+    } catch (error) {
+      return res
+        .status(401)
+        .send({ result: false, msg: 'Fail to stop schedule' });
     }
   } else {
     return res.status(400).send({ result: false, msg: 'Invalid body' });
@@ -163,6 +199,24 @@ function scheduleWatering(schedule) {
   } catch (error) {
     console.log(error);
     return null;
+  }
+}
+
+function startSchedule(id) {
+  try {
+    task[id].start();
+    return true;
+  } catch (error) {
+    throw error;
+  }
+}
+
+function stopSchedule(id) {
+  try {
+    task[id].stop();
+    return true;
+  } catch (error) {
+    throw error;
   }
 }
 
