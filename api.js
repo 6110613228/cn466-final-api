@@ -112,7 +112,7 @@ app.post('/forecastByCity', (req, res) => {
   if (Object.keys(req.body).length === 1 && req.body.hasOwnProperty('city')) {
     axios
       .get(
-        `${WEATHER_URI}/forecast.json?key=${WEATHER_API_KEY}&q=${req.body.city}&aqi=no`
+        `${WEATHER_URI}/forecast.json?key=${WEATHER_API_KEY}&q=${req.body.city}&days=1&aqi=yes&alerts=no`
       )
       .then((response) => {
         return res.send(response.data);
