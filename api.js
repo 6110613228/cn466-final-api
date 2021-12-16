@@ -115,17 +115,12 @@ app.post('/getWeatherByLatLong', (req, res) => {
 // Forecast by city
 app.post('/forecastByCity', (req, res) => {
   if (Object.keys(req.body).length === 1 && req.body.hasOwnProperty('city')) {
-    axios
-      .get(
-        `${WEATHER_URI}/forecast.json?key=${WEATHER_API_KEY}&q=${req.body.city}&days=1&aqi=yes&alerts=no`
-      )
-      .then((response) => {
-        return res.send(response.data);
-      })
-      .catch((error) => {
-        console.log(error.message);
-        return res.status(400).send({ result: false, msg: error.message });
-      });
+    try {
+      let result = await foreCastByCity(req.body.city);
+      res.send(result);
+    } catch (error) {
+      return res.status(400).send({ result: false, msg: error.message });
+    }
   } else {
     return res.status(400).send({ result: false, msg: 'Invalid body' });
   }
@@ -187,6 +182,21 @@ function should_water() {
   // get weather
   // get last data
   // might classified image
+}
+
+function foreCastByCity(city) {
+  return new Promise((resolve, reject) => {
+    axios
+      .get(
+        `${WEATHER_URI}/forecast.json?key=${WEATHER_API_KEY}&q=${city}&days=1&aqi=yes&alerts=no`
+      )
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch((error) => {
+        throw error;
+      });
+  })
 }
 
 function scheduleWatering(schedule) {
