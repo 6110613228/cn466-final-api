@@ -194,6 +194,7 @@ function foreCastByCity(city) {
         resolve(response.data);
       })
       .catch((error) => {
+        reject(error.message)
         throw error;
       });
   })
