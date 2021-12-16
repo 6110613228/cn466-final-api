@@ -125,7 +125,7 @@ app.post('/schedule', (req, res) => {
       let id = scheduleWatering(req.body.schedule);
       return res.send({ result: true, task_id: id, msg: 'Schedule is made' });
     } else {
-      return res.status(401).send({ result: false, msg: 'Fail to schedule' });
+      return res.status(400).send({ result: false, msg: 'Fail to schedule' });
     }
   } else {
     return res.status(400).send({ result: false, msg: 'Invalid body' });
@@ -142,7 +142,7 @@ app.post('/startSchedule', (req, res) => {
       return res.send({ result: true, msg: 'Schedule start' });
     } catch (error) {
       return res
-        .status(401)
+        .status(400)
         .send({ result: false, msg: 'Fail to start schedule' });
     }
   } else {
@@ -160,7 +160,7 @@ app.post('/stopSchedule', (req, res) => {
       return res.send({ result: true, msg: 'Schedule stop' });
     } catch (error) {
       return res
-        .status(401)
+        .status(400)
         .send({ result: false, msg: 'Fail to stop schedule' });
     }
   } else {
@@ -168,7 +168,7 @@ app.post('/stopSchedule', (req, res) => {
   }
 });
 
-function should_water() {
+function should_water(data) {
   // get weather
   // get last data
   // might classified image
@@ -203,6 +203,7 @@ function getWeatherByLatLong(latlong) {
       });
   });
 }
+
 function forecastByCity(city) {
   return new Promise((resolve, reject) => {
     axios
