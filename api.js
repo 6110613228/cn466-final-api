@@ -116,7 +116,7 @@ app.post('/getWeatherByLatLong', (req, res) => {
 app.post('/forecastByCity', async (req, res) => {
   if (Object.keys(req.body).length === 1 && req.body.hasOwnProperty('city')) {
     try {
-      let result = await foreCastByCity(req.body.city);
+      let result = await foreCastByCity(req.body.city).catch((error) => { throw error; });
       res.send(result);
     } catch (error) {
       return res.status(400).send({ result: false, msg: error.message });
