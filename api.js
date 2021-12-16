@@ -222,6 +222,7 @@ function stopSchedule(id) {
 
 function watering() {
   let count = 0;
+  console.log('watering');
   const interval = setInterval(() => {
     mqttClient.publish(LED_TOPIC, 'red');
     setTimeout(() => {
