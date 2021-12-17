@@ -76,10 +76,10 @@ app.get('/watering', (req, res) => {
 });
 
 // weather by city
-app.post('/getWeatherByCity', async (req, res) => {
-  if (Object.keys(req.body).length === 1 && req.body.hasOwnProperty('city')) {
+app.post('/getWeather', async (req, res) => {
+  if (Object.keys(req.body).length === 1 && req.body.hasOwnProperty('q')) {
     try {
-      let result = await getWeatherByCity(req.body.city);
+      let result = await getWeather(req.body.q);
       return res.send(result);
     } catch (error) {
       return res.status(400).send({ result: false, msg: error.message });
@@ -89,28 +89,11 @@ app.post('/getWeatherByCity', async (req, res) => {
   }
 });
 
-// weather by lat & long
-app.post('/getWeatherByLatLong', async (req, res) => {
-  if (
-    Object.keys(req.body).length === 1 &&
-    req.body.hasOwnProperty('latlong')
-  ) {
-    try {
-      let result = await getWeatherByLatLong(req.body.latlong);
-      return res.send(result);
-    } catch (error) {
-      return res.status(400).send({ result: false, msg: 'Invalid body' });
-    }
-  } else {
-    return res.status(400).send({ result: false, msg: 'Invalid body' });
-  }
-});
-
 // Forecast by city
-app.post('/forecastByCity', async (req, res) => {
-  if (Object.keys(req.body).length === 1 && req.body.hasOwnProperty('city')) {
+app.post('/forecast', async (req, res) => {
+  if (Object.keys(req.body).length === 1 && req.body.hasOwnProperty('q')) {
     try {
-      let result = await forecastByCity(req.body.city);
+      let result = await forecast(req.body.q);
       res.send(result);
     } catch (error) {
       return res.status(400).send({ result: false, msg: error.message });
@@ -178,11 +161,11 @@ function should_water(data) {
   // might classified image
 }
 
-function getWeatherByCity(city) {
+function getWeather(q) {
   return new Promise((resolve, reject) => {
     axios
       .get(
-        `${WEATHER_URI}/current.json?key=${WEATHER_API_KEY}&q=${city}&aqi=yes`
+        `${WEATHER_URI}/current.json?key=${WEATHER_API_KEY}&q=${q}&aqi=yes`
       )
       .then((response) => {
         resolve(response.data);
@@ -193,41 +176,11 @@ function getWeatherByCity(city) {
   });
 }
 
-function getWeatherByLatLong(latlong) {
+function forecast(q) {
   return new Promise((resolve, reject) => {
     axios
       .get(
-        `${WEATHER_URI}/current.json?key=${WEATHER_API_KEY}&q=${latlong}&aqi=yes`
-      )
-      .then((response) => {
-        resolve(response.data);
-      })
-      .catch((error) => {
-        reject(error);
-      });
-  });
-}
-
-function forecastByCity(city) {
-  return new Promise((resolve, reject) => {
-    axios
-      .get(
-        `${WEATHER_URI}/forecast.json?key=${WEATHER_API_KEY}&q=${city}&days=1&aqi=yes&alerts=no`
-      )
-      .then((response) => {
-        resolve(response.data);
-      })
-      .catch((error) => {
-        reject(error);
-      });
-  });
-}
-
-function forecastByLatLong(latlong) {
-  return new Promise((resolve, reject) => {
-    axios
-      .get(
-        `${WEATHER_URI}/forecast.json?key=${WEATHER_API_KEY}&q=${latlong}&days=1&aqi=yes&alerts=no`
+        `${WEATHER_URI}/forecast.json?key=${WEATHER_API_KEY}&q=${q}&days=1&aqi=yes&alerts=no`
       )
       .then((response) => {
         resolve(response.data);
