@@ -3,6 +3,7 @@ const express = require('express');
 const axios = require('axios');
 const mqtt = require('mqtt');
 const cron = require('node-cron');
+var cors = require('cors')
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -32,6 +33,9 @@ var task = {};
 
 // Json body parser
 app.use(express.json());
+
+// CORS
+app.use(cors());
 
 // root
 app.get('/', (req, res) => {
