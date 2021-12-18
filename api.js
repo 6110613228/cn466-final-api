@@ -163,7 +163,10 @@ app.post('/stopSchedule', (req, res) => {
 });
 
 app.post('/predict', (req, res) => {
-  console.log(req.body);
+  const buffer = Buffer.from(base64str, 'base64');
+  // get the tensor
+  const ts_image = tf.node.decodeImage(buffer);
+  console.log(ts_image.shape);
   return res.send({ data: req.body });
 });
 
