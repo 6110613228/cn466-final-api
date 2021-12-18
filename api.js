@@ -197,10 +197,10 @@ app.post('/shouldIWater', (req, res) => {
             score += 0;
           }
 
+          console.log(forecast_result);
           let forecastday_condition =
-            forecast_result.forecast.forecastday[0].condition.code;
+            forecast_result.forecast.forecastday[0].condition;
 
-          console.log(forecastday_condition);
           if (forecastday_condition == 1000) {
             score += 0.5;
           } else if (
@@ -212,8 +212,8 @@ app.post('/shouldIWater', (req, res) => {
             score += 0;
           }
 
+          console.log(lastdata_result);
           let humidity = lastdata_result.humidity;
-          console.log(humidity);
           if (humidity >= 70) {
             score += 0;
           } else if (humidity >= 50) {
