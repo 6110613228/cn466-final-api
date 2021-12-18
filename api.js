@@ -35,9 +35,12 @@ var task = {};
 
 // Tensorflowjs
 const class_name = ['Clear', 'Cloudy', 'Night'];
-var model = async () => {
-  await tf.loadLayersModel('file://./save_model_js/model.json');
-};
+
+var model;
+async function model_init() {
+  model = await tf.loadLayersModel('file://./save_model_js/model.json');
+}
+model_init();
 
 // Json body parser
 app.use(express.json({ limit: '30mb' }));
@@ -167,7 +170,9 @@ app.post('/predict', (req, res) => {
   const buffer = Buffer.from(req.body.image, 'base64');
   // get the tensor
   const ts_image = tf.node.decodeImage(buffer);
+
   console.log(ts_image.shape);
+
   let result = predict_image(ts_image);
   return res.send({ prediction: result });
 });
