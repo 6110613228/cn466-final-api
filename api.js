@@ -222,7 +222,11 @@ app.post('/shouldIWater', (req, res) => {
           } else {
             msg = 'You should not water your plant';
           }
-          return res.send({ data: results, score: score, msg: msg });
+          return res.send({
+            data: [predict_result, forecastday_rain_chance, humidity],
+            score: score,
+            msg: msg,
+          });
         })
         .catch((error) => {
           res.send({ error: error.message });
