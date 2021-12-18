@@ -269,7 +269,7 @@ function getLastData(bid) {
 
       if ((await query.count()) === 0) {
         console.log('No documents found!');
-        return reject(new Error('No documents found!'));
+        reject(new Error('No documents found!'));
       }
 
       const result = await query.toArray();
