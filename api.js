@@ -69,7 +69,7 @@ app.get('/getLastData/:bid', async (req, res) => {
     if ((await query.count()) === 0) {
       console.log('No documents found!');
 
-      return res.send({ result: false, msg: 'No documents found' });
+      return res.status(400).send({ result: false, msg: 'No documents found' });
     }
 
     const result = await query.toArray();
@@ -78,7 +78,7 @@ app.get('/getLastData/:bid', async (req, res) => {
   } catch (error) {
     console.log(error.message);
 
-    return res.send({ result: false, msg: error });
+    return res.status(400).send({ result: false, msg: error });
   }
 });
 
