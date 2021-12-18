@@ -184,6 +184,8 @@ app.post('/shouldIWater', (req, res) => {
         getLastData(req.body.bid),
       ])
         .then((results) => {
+          [predict_result, a, b] = results;
+          console.log(predict_result);
           return res.send({ result: results });
         })
         .catch((error) => {
