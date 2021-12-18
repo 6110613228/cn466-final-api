@@ -177,15 +177,15 @@ app.post('/predict', (req, res) => {
   return res.send({ prediction: result });
 });
 
-function predict_image(image) {
+async function predict_image(image) {
   let resize_image = image.resizeBilinear([256, 256]);
   let expanddim_resize_image = resize_image.expandDims(0);
 
   console.log(expanddim_resize_image.shape);
 
   let predict = model.predict(expanddim_resize_image);
-  let result = async () => await predict.data();
-  let tf_result = tf.tensor1d(result());
+  let result = await predict.data();
+  let tf_result = tf.tensor1d(result);
 
   let argMax_result = tf_result.argMax().dataSync()[0];
   return class_name[argMax_result];
