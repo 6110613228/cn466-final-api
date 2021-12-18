@@ -39,7 +39,7 @@ var model = async () => {
 };
 
 // Json body parser
-app.use(express.json());
+app.use(express.json({limit: '30mb'}));
 
 // CORS
 app.use(cors());
