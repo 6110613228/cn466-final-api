@@ -231,10 +231,10 @@ app.post('/shouldIWater', (req, res) => {
           });
         })
         .catch((error) => {
-          res.send({ error: error.message });
+          res.status(400).send({ error: error.message });
         });
     } catch (error) {
-      res.send({ error: error.message });
+      res.status(400).send({ error: error.message });
     }
   } else {
     return res.status(400).send({ result: false, msg: 'Invalid body' });
