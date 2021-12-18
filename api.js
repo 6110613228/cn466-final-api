@@ -200,6 +200,7 @@ app.post('/shouldIWater', (req, res) => {
           let forecastday_condition =
             forecast_result.forecast.forecastday[0].condition.code;
 
+          console.log(forecastday_condition);
           if (forecastday_condition == 1000) {
             score += 0.5;
           } else if (
@@ -212,6 +213,7 @@ app.post('/shouldIWater', (req, res) => {
           }
 
           let humidity = lastdata_result.humidity;
+          console.log(humidity);
           if (humidity >= 70) {
             score += 0;
           } else if (humidity >= 50) {
@@ -225,13 +227,13 @@ app.post('/shouldIWater', (req, res) => {
           } else {
             msg = 'You should not water your plant';
           }
-          return res.send({ msg: msg });
+          return res.send({ data: results, msg: msg });
         })
         .catch((error) => {
-          res.send({ error: error });
+          res.send({ data: result, error: error });
         });
     } catch (error) {
-      res.send({ error: error });
+      res.send({ data: result, error: error });
     }
   } else {
     return res.status(400).send({ result: false, msg: 'Invalid body' });
