@@ -3,7 +3,8 @@ const express = require('express');
 const axios = require('axios');
 const mqtt = require('mqtt');
 const cron = require('node-cron');
-var cors = require('cors')
+const cors = require('cors');
+const tf = require('@tensorflow/tfjs-node');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -30,6 +31,12 @@ const LED_TOPIC = process.env.LED_TOPIC;
 // schedule
 var ID = 0;
 var task = {};
+
+// Tensorflowjs
+const class_name = ['Clear', 'Cloudy', 'Night'];
+var model = async () => {
+  await tf.loadLayersModel('file://./save_model_js/model.json');
+};
 
 // Json body parser
 app.use(express.json());
@@ -155,6 +162,27 @@ app.post('/stopSchedule', (req, res) => {
   }
 });
 
+app.post('/predict', (req, res) => {
+  console.log(req.body);
+  return res.send({ data: req.body });
+});
+
+function predict_image(image) {
+  let image = tf.node.decodeImage(image);
+  let resize_image = image.resizeBilinear([256, 256]);
+  let expanddim_resize_image = resize_image.expandDims(0);
+
+  console.log(expanddim_resize_image.shape);
+
+  let predict = model.predict(expanddim_resize_image);
+  let result = async () => await predict.data();
+
+  let tf_result = tf.tensor1d(result);
+
+  let argMax_result = tf_result.argMax().dataSync()[0];
+  return class_name[argMax_result];
+}
+
 function should_water(data) {
   // get weather
   // get last data
@@ -164,9 +192,7 @@ function should_water(data) {
 function getWeather(q) {
   return new Promise((resolve, reject) => {
     axios
-      .get(
-        `${WEATHER_URI}/current.json?key=${WEATHER_API_KEY}&q=${q}&aqi=yes`
-      )
+      .get(`${WEATHER_URI}/current.json?key=${WEATHER_API_KEY}&q=${q}&aqi=yes`)
       .then((response) => {
         resolve(response.data);
       })
