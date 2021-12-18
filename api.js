@@ -257,12 +257,6 @@ async function predict_image(image) {
   return class_name[argMax_result];
 }
 
-function should_water(data) {
-  // get weather
-  // get last data
-  // might classified image
-}
-
 function getLastData(bid) {
   return new Promise(async (resolve, reject) => {
     try {
