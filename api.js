@@ -166,15 +166,33 @@ app.post('/stopSchedule', (req, res) => {
   }
 });
 
-app.post('/predict', async (req, res) => {
-  const buffer = Buffer.from(req.body.image, 'base64');
-  // get the tensor
-  const ts_image = tf.node.decodeImage(buffer);
+app.post('/shouldIWater', async (req, res) => {
+  if (
+    Object.keys(req.body).length === 3 &&
+    req.body.hasOwnProperty('image') &&
+    req.body.hasOwnProperty('q') &&
+    req.body.hasOwnProperty('bid')
+  ) {
+    try {
+      const buffer = Buffer.from(req.body.image, 'base64');
+      const ts_image = tf.node.decodeImage(buffer);
+      console.log(ts_image.shape);
 
-  console.log(ts_image.shape);
+      [predict_result, forecast_result, lastdata_result] = Promise.all([
+        predict_image(ts_image),
+        forecast(req.body.q),
+        getLastData(req.body.bid),
+      ]);
 
-  let result = await predict_image(ts_image);
-  return res.send({ prediction: result });
+      return res.send({
+        result: [predict_result, forecast_result, lastdata_result],
+      });
+    } catch (error) {
+      res.send({ error: error });
+    }
+  } else {
+    return res.status(400).send({ result: false, msg: 'Invalid body' });
+  }
 });
 
 async function predict_image(image) {
@@ -197,6 +215,30 @@ function should_water(data) {
   // get weather
   // get last data
   // might classified image
+}
+
+function getLastData(bid) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      await client.connect();
+
+      const db = client.db(DB);
+      const collection = db.collection(COLLECTION);
+
+      const query = collection.find({ BID: parseInt(bid) });
+
+      if ((await query.count()) === 0) {
+        console.log('No documents found!');
+        reject(null);
+      }
+
+      const result = await query.toArray();
+
+      resolve(result[result.length - 1]);
+    } catch (error) {
+      reject(error);
+    }
+  });
 }
 
 function getWeather(q) {
