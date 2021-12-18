@@ -168,7 +168,6 @@ app.post('/predict', (req, res) => {
 });
 
 function predict_image(image) {
-  let image = tf.node.decodeImage(image);
   let resize_image = image.resizeBilinear([256, 256]);
   let expanddim_resize_image = resize_image.expandDims(0);
 
