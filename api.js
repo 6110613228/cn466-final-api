@@ -184,9 +184,48 @@ app.post('/shouldIWater', (req, res) => {
         getLastData(req.body.bid),
       ])
         .then((results) => {
-          [predict_result, a, b] = results;
-          console.log(predict_result);
-          return res.send({ result: results });
+          [predict_result, forecast_result, lastdata_result] = results;
+
+          let msg = '';
+
+          let score = 0;
+          if (predict_result == class_name[0]) {
+            score += 0.2;
+          } else if (predict_result == class_name[1]) {
+            score += 0.1;
+          } else {
+            score += 0;
+          }
+
+          let forecastday_condition =
+            forecast_result.forecast.forecastday[0].condition.code;
+
+          if (forecastday_condition == 1000) {
+            score += 0.5;
+          } else if (
+            forecastday_condition > 1000 &&
+            forecastday_condition <= 1006
+          ) {
+            score += 0.3;
+          } else {
+            score += 0;
+          }
+
+          let humidity = lastdata_result.humidity;
+          if (humidity >= 70) {
+            score += 0;
+          } else if (humidity >= 50) {
+            score += 0.2;
+          } else {
+            score += 0.3;
+          }
+
+          if (score >= 0.6) {
+            msg = 'You should water your plant';
+          } else {
+            msg = 'You should not water your plant';
+          }
+          return res.send({ msg: msg });
         })
         .catch((error) => {
           res.send({ error: error });
