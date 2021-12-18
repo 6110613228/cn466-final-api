@@ -184,11 +184,8 @@ function predict_image(image) {
   console.log(expanddim_resize_image.shape);
 
   let predict = model.predict(expanddim_resize_image);
-  let result = async () => {
-    return await predict.data();
-  };
-
-  let tf_result = tf.tensor1d(result);
+  let result = async () => await predict.data();
+  let tf_result = tf.tensor1d(result());
 
   let argMax_result = tf_result.argMax().dataSync()[0];
   return class_name[argMax_result];
