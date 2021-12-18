@@ -166,14 +166,14 @@ app.post('/stopSchedule', (req, res) => {
   }
 });
 
-app.post('/predict', (req, res) => {
+app.post('/predict', async (req, res) => {
   const buffer = Buffer.from(req.body.image, 'base64');
   // get the tensor
   const ts_image = tf.node.decodeImage(buffer);
 
   console.log(ts_image.shape);
 
-  let result = predict_image(ts_image);
+  let result = await predict_image(ts_image);
   return res.send({ prediction: result });
 });
 
