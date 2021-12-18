@@ -5,6 +5,7 @@ const mqtt = require('mqtt');
 const cron = require('node-cron');
 const cors = require('cors');
 const tf = require('@tensorflow/tfjs-node');
+const fs = require('fs');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -39,7 +40,7 @@ var model = async () => {
 };
 
 // Json body parser
-app.use(express.json({limit: '30mb'}));
+app.use(express.json({ limit: '30mb' }));
 
 // CORS
 app.use(cors());
@@ -167,7 +168,8 @@ app.post('/predict', (req, res) => {
   // get the tensor
   const ts_image = tf.node.decodeImage(buffer);
   console.log(ts_image.shape);
-  return res.send({ data: req.body });
+  let result = predict_image(ts_image);
+  return res.send({ prediction: result });
 });
 
 function predict_image(image) {
