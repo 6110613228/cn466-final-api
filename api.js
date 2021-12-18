@@ -198,15 +198,12 @@ app.post('/shouldIWater', (req, res) => {
           }
 
           console.log(forecast_result);
-          let forecastday_condition =
-            forecast_result.forecast.forecastday[0].condition;
+          let forecastday_rain_chance =
+            forecast_result.forecast.forecastday[0].day.daily_chance_of_rain;
 
-          if (forecastday_condition == 1000) {
+          if (forecastday_rain_chance > 0.6) {
             score += 0.5;
-          } else if (
-            forecastday_condition > 1000 &&
-            forecastday_condition <= 1006
-          ) {
+          } else if (forecastday_rain_chance > 0.3) {
             score += 0.3;
           } else {
             score += 0;
@@ -227,7 +224,7 @@ app.post('/shouldIWater', (req, res) => {
           } else {
             msg = 'You should not water your plant';
           }
-          return res.send({ data: results, msg: msg, c: forecast_result.forecast.forecastday[0].condition });
+          return res.send({ data: results, msg: msg });
         })
         .catch((error) => {
           res.send({ error: error.message });
