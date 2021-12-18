@@ -197,7 +197,6 @@ app.post('/shouldIWater', (req, res) => {
             score += 0;
           }
 
-          console.log(forecast_result);
           let forecastday_rain_chance =
             forecast_result.forecast.forecastday[0].day.daily_chance_of_rain;
 
@@ -209,7 +208,6 @@ app.post('/shouldIWater', (req, res) => {
             score += 0;
           }
 
-          console.log(lastdata_result);
           let humidity = lastdata_result.humidity;
           if (humidity >= 70) {
             score += 0;
@@ -224,7 +222,7 @@ app.post('/shouldIWater', (req, res) => {
           } else {
             msg = 'You should not water your plant';
           }
-          return res.send({ data: results, msg: msg });
+          return res.send({ data: results, score: score, msg: msg });
         })
         .catch((error) => {
           res.send({ error: error.message });
