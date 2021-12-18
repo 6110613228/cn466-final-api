@@ -49,7 +49,10 @@ app.use(cors());
 
 // root
 app.get('/', (req, res) => {
-  res.send({ msg: 'Hello, World' });
+  res.send({
+    Contributer: 'Poonnatuch Boonyarattanasoontorn',
+    email: '6110613228@student.tu.ac.th',
+  });
 });
 
 // get last data
