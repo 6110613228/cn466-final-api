@@ -201,11 +201,11 @@ app.post('/shouldIWater', (req, res) => {
             forecast_result.forecast.forecastday[0].day.daily_chance_of_rain;
 
           if (forecastday_rain_chance > 0.6) {
-            score += 0.5;
+            score += 0;
           } else if (forecastday_rain_chance > 0.3) {
             score += 0.3;
           } else {
-            score += 0;
+            score += 0.5;
           }
 
           let humidity = lastdata_result.humidity;
