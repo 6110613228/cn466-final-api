@@ -5,7 +5,6 @@ const mqtt = require('mqtt');
 const cron = require('node-cron');
 const cors = require('cors');
 const tf = require('@tensorflow/tfjs-node');
-const fs = require('fs');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
