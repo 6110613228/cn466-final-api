@@ -166,7 +166,7 @@ app.post('/stopSchedule', (req, res) => {
   }
 });
 
-app.post('/shouldIWater', async (req, res) => {
+app.post('/shouldIWater', (req, res) => {
   if (
     Object.keys(req.body).length === 3 &&
     req.body.hasOwnProperty('image') &&
@@ -178,15 +178,17 @@ app.post('/shouldIWater', async (req, res) => {
       const ts_image = tf.node.decodeImage(buffer);
       console.log(ts_image.shape);
 
-      [predict_result, forecast_result, lastdata_result] = Promise.all([
+      Promise.all([
         predict_image(ts_image),
         forecast(req.body.q),
         getLastData(req.body.bid),
-      ]);
-
-      return res.send({
-        result: [predict_result, forecast_result, lastdata_result],
-      });
+      ])
+        .then((results) => {
+          return res.send({ result: results });
+        })
+        .catch((error) => {
+          res.send({ error: error });
+        });
     } catch (error) {
       res.send({ error: error });
     }
