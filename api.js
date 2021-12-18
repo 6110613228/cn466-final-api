@@ -211,7 +211,7 @@ app.post('/shouldIWater', (req, res) => {
           let humidity = lastdata_result.humidity;
           if (humidity >= 70) {
             score += 0;
-          } else if (humidity >= 50) {
+          } else if (humidity >= 55) {
             score += 0.2;
           } else {
             score += 0.3;
