@@ -17,6 +17,12 @@
     - [หน้าที่](#หน้าที่)
     - [Design](#design-1)
     - [การทำงาน](#การทำงาน)
+      - [Get last data](#get-last-data)
+      - [Watering](#watering)
+      - [Get weather](#get-weather)
+      - [Forecast weather](#forecast-weather)
+      - [Schedule watering](#schedule-watering)
+      - [Should water](#should-water)
   - [Demo](#demo)
     - [Link](#link)
 
@@ -66,7 +72,39 @@ API (repository นี้) ทำหน้าที่เป็น End point เ
 
 ### Design
 
+
 ### การทำงาน
+
+#### Get last data
+
+Get last data จะทำการดึงข้อมูลตัวล่าสุดจาก `MongoDB` เเละส่ง Document นั้นคืนให้กับผู้ร้องขอ โดยตัว API ของเราจะเป็นผู้ถือ URL, Username, Password สำหรับเข้าใช้ Cluster ที่เราตั้งไว้
+
+#### Watering
+
+Watering จะทำการส่งข้อมูลไปให้บอร์ดผ่าน MQTT protocal โดยใช้ `HiveMQ` เป็น server หลังจากผู้ใช้เรียก /watering พร้อมกับส่ง Line userId เข้ามาใน body ก็จะทำการสั่งให้บอร์ดรดน้ำต้นไม้เเละใช้ Line messaging API ในการ Push message ไปให้กับ userId ที่ส่งเข้ามาว่าทำการรดน้ำเเล้ว
+
+#### Get weather
+
+Get weather เป็นการเรียกใช้ [weatherapi](https://www.weatherapi.com/) โดยผู้เรียกใช้สามารถส่งข้อมูลเข้ามาเช่น ชื่อเมือง เพื่อรับข้อมูลสภาพอากาศ ณ ปัจจุบันได้ โดย API จะเป็นผู้ถือ API key เเละครอบการยิง request ไปที่ weatherapi ด้วย end point ของตัวเอง ทำให้งานส่วนอื่นๆของ App นี้สามารถใช้ weatherapi ได้สะดวกขึ้น
+
+การใช้ weatherapi ทำให้ตัว Application สามารถตอบผู้ใช้ได้หลากหลายขึ้น ทำให้ตัว Chatbot ดูมี personality ขึ้นมา
+
+#### Forecast weather
+
+Forecast weather เป็นการเรียกใช้ [weatherapi](https://www.weatherapi.com/) เหมือนกันกับ Get weather ซึ่งการทำงานเหมือนกันเเต่ forecast weather จะถูกนำมาใช้ในงานนี้ในส่วนของ api Should Water เป็นส่วนหนึ่งในการตัดสินใจ
+
+#### Schedule watering
+
+เป็น api ที่ให้ผู้ใช้ส่งข้อมูลเข้ามาเพื่อจัดเวลาในการรดน้ำได้ โดยใช้ [node-cron](https://www.npmjs.com/package/node-cron) (คล้ายกับ crontab) ในการ Schedule
+
+#### Should water
+
+เป็น API ที่ให้ผู้ใช้ส่งข้อมูลเข้ามาเพื่อทำการ predict ว่าควรหรือไม่ควรที่จะรดน้ำต้นไม้ในวันนี้ โดยจะเป็นการเรียกใช้ API หลายๆตัวเพื่อรวบรวมข้อมูลเเละส่งค่า score กลับมาว่าควรหรือไม่ที่จะรดน้ำ
+
+API ที่เรียกใช้
+   1. forecast weather
+   2. Get last data
+   3. วัดเเสงจากรูปภาพโดยใช้ `TensorflowJS`
 
 ---
 
