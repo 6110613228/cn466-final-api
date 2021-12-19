@@ -72,6 +72,7 @@ API (repository นี้) ทำหน้าที่เป็น End point เ
 
 ### Design
 
+![CN466 IoT](https://user-images.githubusercontent.com/61135042/146674470-6274efcc-7d72-4bf5-99b8-539f0e65bd65.png)
 
 ### การทำงาน
 
