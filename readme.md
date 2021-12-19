@@ -1,3 +1,5 @@
+![1](https://user-images.githubusercontent.com/61135042/146673161-fb729d2f-79df-439e-9743-281dbff81c8a.png)
+
 # CN466-final-API
 
 ---
@@ -49,6 +51,8 @@ Developed by: Poonnatuch B.
 ---
 
 ## Design
+
+![2](https://user-images.githubusercontent.com/61135042/146673178-d1a8ed58-6305-48aa-b22d-2cb6adcf133a.png)
 
 ---
 
