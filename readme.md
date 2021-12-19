@@ -2,11 +2,23 @@
 
 # CN466-final-API
 
+## Other work
+
+### [Line&LIFF](https://github.com/6110613228/cn466-final-line)
+
+### [Model (TensorflowJS)](https://github.com/6110613228/cn466-final-model)
+
+### [MQTT (Arduino)](https://github.com/6110613228/cn466-final-mqtt)
+
 ---
 
 ## Table of contents
 
 - [CN466-final-API](#cn466-final-api)
+  - [Other work](#other-work)
+    - [Line&LIFF](#lineliff)
+    - [Model (TensorflowJS)](#model-tensorflowjs)
+    - [MQTT (Arduino)](#mqtt-arduino)
   - [Table of contents](#table-of-contents)
   - [About](#about)
   - [Motivation](#motivation)
