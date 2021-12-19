@@ -103,11 +103,13 @@ app.post('/watering', (req, res) => {
         },
       }
     )
-    .then((response) => {})
+    .then((response) => {
+      return res.send({ result: true, msg: 'Watering your plant.' });
+    })
     .catch((error) => {
       console.log(error.message);
+      res.send({ result: false, msg: 'Fail to water your plant.' });
     });
-  return res.send({ result: true, msg: 'Watering your plant.' });
 });
 
 // weather by city
