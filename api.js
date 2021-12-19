@@ -83,8 +83,30 @@ app.get('/getLastData/:bid', async (req, res) => {
 });
 
 // watering
-app.get('/watering', (req, res) => {
+app.post('/watering', (req, res) => {
   watering();
+  axios
+    .post(
+      'https://api.line.me/v2/bot/message/push',
+      {
+        to: req.body.uid,
+        messages: [
+          {
+            type: 'text',
+            text: 'Watered your plant!',
+          },
+        ],
+      },
+      {
+        headers: {
+          Authorization: 'Bearer ' + process.env.CHANNEL_ACC_TOKEN,
+        },
+      }
+    )
+    .then((response) => {})
+    .catch((error) => {
+      console.log(error.message);
+    });
   return res.send({ result: true, msg: 'Watering your plant.' });
 });
 
